@@ -1,0 +1,23 @@
+{
+ "name": "Roomie Kids",
+ "short_name": "Roomie Kids",
+ "description": "Muebles y juegos infantiles en Costa Rica, por WhatsApp.",
+ "lang": "es-CR",
+ "start_url": "./",
+ "scope": "./",
+ "display": "browser",
+ "background_color": "#FBF9F5",
+ "theme_color": "#FBF9F5",
+ "icons": [
+  {
+   "src": "assets/marca/icono-192.df6da53dca.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "assets/marca/icono-512.4f48423d62.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  }
+ ]
+}

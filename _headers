@@ -1,0 +1,29 @@
+# Encabezados de Cloudflare Pages
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Robots-Tag: noindex
+
+/pedir/*
+  X-Robots-Tag: noindex
+
+/avisar/*
+  X-Robots-Tag: noindex
+
+/consultar/*
+  X-Robots-Tag: noindex
+
+/whatsapp/*
+  X-Robots-Tag: noindex
+
+/mi-lista/*
+  X-Robots-Tag: noindex
+
+/.generado_por_roomie
+  X-Robots-Tag: noindex
+
+/manifest.webmanifest
+  Content-Type: application/manifest+json

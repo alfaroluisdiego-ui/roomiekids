@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es-CR" data-raiz="../../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Consulta: Play barquito | Roomie Kids</title>
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/json" id="datos-pedido">{"antes": ["Hola, tengo una pregunta sobre este:", "Play barquito (ref. RK-008)"], "precio": null, "url": "https://roomiekids.com/producto/play-barquito/", "despues": ["", ""], "colores": [], "etiqueta": "Color", "numero": "50600000000", "redirigir": false, "esperar": false}</script>
+<script>
+(function () {
+  var d = document, el = d.getElementById('datos-pedido');
+  if (!el) return;
+  var p;
+  try { p = JSON.parse(el.textContent); } catch (err) { return; }
+  // Navegadores internos de Instagram, Facebook y TikTok, y cualquier WebView de Android (; wv)).
+  var enApp = /Instagram|FBAN|FBAV|FB_IAB|musical_ly|BytedanceWebview|; wv\)/.test(navigator.userAgent || '');
+  if (enApp) d.documentElement.className += ' en-app';
+  var lineas, vacia = false;
+  if (p.lista) {
+    var items = [];
+    try { items = JSON.parse(localStorage.getItem('rk-lista') || '[]'); } catch (err) { items = []; }
+    var cat = (window.RK_CATALOGO && window.RK_CATALOGO.productos) || {};
+    items = (Array.isArray(items) ? items : []).filter(function (x) { return x && cat[x.s]; });
+    // Los agotados no se piden: van al final, sin número, como pedido de aviso.
+    var pedir = items.filter(function (x) { return !cat[x.s].a; });
+    var agotados = items.filter(function (x) { return cat[x.s].a; });
+    if (!items.length) {
+      vacia = true;
+      lineas = p.antes_vacia.slice();
+    } else {
+      lineas = pedir.length ? p.antes.slice() : [];
+      pedir.forEach(function (x, i) {
+        var q = cat[x.s], ops = q.o || [];
+        var v = ops.indexOf(x.v) >= 0 ? x.v : (ops.length === 1 ? ops[0] : '');
+        var etiqueta = q.dis ? 'Diseño' : 'Color';
+        var linea = (i + 1) + '. ' + q.n + ' (ref. ' + q.c + ')';
+        if (v) linea += '. ' + etiqueta + ': ' + v;
+        else if (ops.length > 1) linea += '. ' + etiqueta + ': ' + p.sin_opcion;
+        if (q.p) linea += '. Precio en la página: ' + q.p;
+        lineas.push(linea);
+        lineas.push(q.url);
+      });
+      if (agotados.length) {
+        if (pedir.length) lineas.push('');
+        lineas.push(p.agotados);
+        agotados.forEach(function (x) { lineas.push(cat[x.s].n + ' (ref. ' + cat[x.s].c + ')'); });
+      }
+      lineas = lineas.concat(pedir.length ? p.despues : p.despues_agotados);
+    }
+  } else {
+    var colores = p.colores || [], color = null;
+    try { color = new URLSearchParams(location.search).get('color'); } catch (err) { color = null; }
+    if (colores.indexOf(color) < 0) color = colores.length === 1 ? colores[0] : null;
+    lineas = p.antes.slice();
+    if (p.url) {
+      if (color) lineas.push(p.etiqueta + ': ' + color);
+      else if (colores.length > 1 && p.sin_color) lineas.push(p.sin_color);
+      if (p.precio) lineas.push(p.precio);
+      lineas.push(p.url);
+      lineas = lineas.concat(p.despues);
+    }
+  }
+  var mensaje = lineas.join('\n');
+  var destino = 'https://wa.me/' + p.numero + '?text=' + encodeURIComponent(mensaje);
+  d.addEventListener('DOMContentLoaded', function () {
+    // Vista local con doble clic (file://): los enlaces a carpetas necesitan index.html.
+    if (location.protocol === 'file:') {
+      Array.prototype.forEach.call(d.querySelectorAll('a[href]'), function (a) {
+        var h = a.getAttribute('href');
+        if (!/^([a-z]+:|\/\/|#)/i.test(h) && /\/$/.test(h)) a.setAttribute('href', h + 'index.html');
+        else if (h === './' || h === '../' || h === '../../') a.setAttribute('href', h + 'index.html');
+      });
+    }
+    var caja = d.getElementById('mensaje');
+    if (caja) caja.textContent = mensaje;
+    var abrir = d.getElementById('abrir-wa');
+    if (abrir) abrir.setAttribute('href', destino);
+    if (vacia) d.documentElement.className += ' lista-vacia';
+    var copiar = d.querySelector('[data-copiar]');
+    if (copiar) {
+      copiar.hidden = false;
+      copiar.addEventListener('click', function () {
+        var listo = function () { var ok = d.querySelector('[data-copiado]'); if (ok) ok.hidden = false; };
+        var aMano = function () {
+          var t = d.createElement('textarea'); t.value = mensaje; t.setAttribute('readonly', '');
+          t.style.position = 'fixed'; t.style.opacity = '0'; d.body.appendChild(t); t.select();
+          try { if (d.execCommand('copy')) listo(); } catch (err) { }
+          d.body.removeChild(t);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(mensaje).then(listo, aMano);
+        else aMano();
+      });
+    }
+  });
+  if (!p.redirigir || enApp || vacia) return;
+  var ir = function () { location.replace(destino); };
+  if (!p.esperar) { ir(); return; }
+  var hecho = false;
+  var una = function () { if (!hecho) { hecho = true; ir(); } };
+  window.addEventListener('load', una);
+  setTimeout(una, 700);
+})();
+</script>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FBF9F5">
+<link rel="icon" href="../../assets/marca/icono-32.29f154ca12.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/marca/icono-180.c175fb3f04.png">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&amp;family=Nunito+Sans:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="../../assets/estilos.b7698dcd14.css">
+
+<meta property="og:site_name" content="Roomie Kids">
+<meta property="og:locale" content="es_CR">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Consulta: Play barquito | Roomie Kids">
+<meta property="og:image" content="https://roomiekids.com/assets/og/roomie-kids.c5f6939763.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+
+
+</head>
+<body class="pagina-intermedia">
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="cabecera"><p class="franja">Versión preliminar. Fotos y precios en camino.</p><div class="contenedor cabecera__fila"><a class="marca" href="../../" aria-label="Roomie Kids, inicio"><picture><source media="(min-width: 480px)" srcset="../../assets/marca/horizontal-56.b4f5ce3ef7.png 1x, ../../assets/marca/horizontal-112.e9e163c169.png 2x" width="297" height="56"><img class="marca__logo" src="../../assets/marca/sin_lema-56.4503c0efb2.png" srcset="../../assets/marca/sin_lema-56.4503c0efb2.png 1x, ../../assets/marca/sin_lema-112.ac708c407a.png 2x" width="149" height="56" alt="Roomie Kids"></picture></a></div></header><main id="contenido" class="intermedia">
+<div class="intermedia__caja">
+<h1 data-sin-app>Abriendo WhatsApp con su consulta…</h1>
+<h1 data-solo-app>Su mensaje está listo</h1>
+<p class="intermedia__texto" data-sin-app>Este es el mensaje. Usted lo revisa y lo envía desde WhatsApp.</p>
+<p class="intermedia__texto" data-solo-app>Toque Abrir WhatsApp para enviarlo. Desde Instagram o Facebook, WhatsApp se abre cuando usted toca el botón.</p>
+
+<div class="intermedia__envio" data-sin-vacia>
+<pre class="mensaje" id="mensaje">Hola, tengo una pregunta sobre este:
+Play barquito (ref. RK-008)
+https://roomiekids.com/producto/play-barquito/
+
+</pre>
+<a class="boton boton--primario boton--grande boton--ancho" id="abrir-wa" href="https://wa.me/50600000000?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20este%3A%0APlay%20barquito%20%28ref.%20RK-008%29%0Ahttps%3A%2F%2Froomiekids.com%2Fproducto%2Fplay-barquito%2F%0A%0A"><svg class="i" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/></svg>Abrir WhatsApp</a>
+<div class="intermedia__app" data-solo-app>
+<button type="button" class="boton boton--tonal boton--ancho" data-copiar hidden><svg class="i" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><!-- Dibujo propio al estilo Phosphor regular. --><polyline fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" points="168 168 216 168 216 40 88 40 88 88"/><rect fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" x="40" y="88" width="128" height="128"/></svg>Copiar mensaje</button>
+<p class="intermedia__copiado" data-copiado role="status" hidden><svg class="i" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>Mensaje copiado. Péguelo en el chat de Roomie Kids.</p>
+<p class="intermedia__ayuda">Si le aparece WhatsApp Web o una pantalla para iniciar sesión, toque los tres puntos de arriba y elija Abrir en el navegador. También puede escribirnos directo al <span class="pc">Por confirmar</span>.</p>
+</div>
+<p class="intermedia__nota" data-sin-app>Si WhatsApp no se abre solo, toque el botón.</p>
+
+</div>
+<noscript><p class="intermedia__nota">Toque Abrir WhatsApp para continuar.</p></noscript>
+<p class="intermedia__pendiente">Número de WhatsApp: <span class="pc">Por confirmar</span>. Mientras falte, esta página no abre WhatsApp sola.</p>
+<p class="intermedia__confianza"><svg class="i" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></svg><span>Nunca le pedimos códigos de WhatsApp, contraseñas ni adelantos.</span></p>
+<a class="enlace enlace--fuerte intermedia__volver" href="../../producto/play-barquito/">Volver a Play barquito</a>
+</div>
+</main>
+</body>
+</html>
