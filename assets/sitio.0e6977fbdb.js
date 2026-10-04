@@ -163,9 +163,9 @@
         if (enLista(slug)) {
           var antes = leerLista().filter(function (x) { return x.s === slug; })[0];
           quitar(slug);
-          avisar('Lo quitamos de su lista.', function () { agregar(slug, antes ? antes.v : ''); b.focus(); });
+          avisar('Lo quitamos de tu lista.', function () { agregar(slug, antes ? antes.v : ''); b.focus(); });
         }
-        else { agregar(slug, ''); avisar('Agregado a su lista.'); }
+        else { agregar(slug, ''); avisar('Agregado a tu lista.'); }
       });
     });
     oyentes.push(marcarCorazones);
@@ -187,7 +187,7 @@
       caja.hidden = false;
       caja.querySelector('[data-combo]').addEventListener('click', function (ev) {
         ev.currentTarget.getAttribute('data-combo').split(' ').forEach(function (s) { if (!enLista(s)) agregar(s, ''); });
-        avisar('Agregados a su lista.');
+        avisar('Agregados a tu lista.');
         var listo = caja.querySelector('[data-combo-listo] a');
         if (listo) listo.focus();
       });
@@ -224,13 +224,13 @@
     var slugFicha = fichaLista.getAttribute('data-slug');
     fichaLista.querySelector('[data-lista-agregar]').addEventListener('click', function () {
       agregar(slugFicha, opcionElegida());
-      avisar('Agregado a su lista.');
+      avisar('Agregado a tu lista.');
       var enlace = fichaLista.querySelector('[data-lista-esta] a');
       if (enlace) enlace.focus();
     });
     fichaLista.querySelector('[data-lista-quitar]').addEventListener('click', function () {
       quitar(slugFicha);
-      avisar('Lo quitamos de su lista.');
+      avisar('Lo quitamos de tu lista.');
       fichaLista.querySelector('[data-lista-agregar]').focus();
     });
     oyentes.push(marcarFicha);
@@ -707,11 +707,11 @@
       resultado.textContent = filtrando ? (n ? textoProductos(n) + (n === 1 ? ' encontrado' : ' encontrados') : sinNada) : '';
       /* Sin resultados el mensaje ya está a la vista en el bloque vacío: aquí solo se anuncia. */
       resultado.classList.toggle('sr', !filtrando || n === 0);
-      /* La frase sigue en el HTML con " o escríbanos por WhatsApp." (el único enlace a WhatsApp). */
+      /* La frase sigue en el HTML con " o escríbenos por WhatsApp." (el único enlace a WhatsApp). */
       if (vacioTexto) {
         vacioTexto.textContent = estado.q
-          ? 'No encontramos «' + estado.q.trim() + '». Pruebe con otra palabra'
-          : 'No hay productos con ese filtro. Quite uno';
+          ? 'No encontramos «' + estado.q.trim() + '». Prueba con otra palabra'
+          : 'No hay productos con ese filtro. Quita uno';
       }
       if (limpiarB) limpiarB.textContent = estado.q && !estado.espacio && !estado.disp ? 'Borrar la búsqueda' : 'Quitar los filtros';
       if (vacio) vacio.hidden = n > 0;
@@ -786,7 +786,7 @@
       var l = leerLista().filter(function (x) { return cat[x.s]; });
       vaciaB.hidden = l.length > 0;
       llena.hidden = l.length === 0;
-      conteo.textContent = l.length === 1 ? '1 producto en su lista' : l.length + ' productos en su lista';
+      conteo.textContent = l.length === 1 ? '1 producto en tu lista' : l.length + ' productos en tu lista';
       if (resumen) resumen.textContent = textoProductos(l.length);
       if (barraLista) {
         barraLista.hidden = l.length === 0;
@@ -846,7 +846,7 @@
           var botones = ul.querySelectorAll('[data-item-quitar]');
           if (botones.length) botones[Math.min(indice, botones.length - 1)].focus();
           else { var ver = vaciaB.querySelector('a'); if (ver) ver.focus(); }
-          avisar('Lo quitamos de su lista.', function () {
+          avisar('Lo quitamos de tu lista.', function () {
             var lista = leerLista();
             if (!lista.some(function (y) { return y.s === copia.s; })) {
               lista.splice(Math.max(0, Math.min(posicion, lista.length)), 0, copia);
